@@ -1,6 +1,7 @@
 import sys,os,argparse,time
 import numpy as np
 import torch
+import networks
 
 import utils
 
@@ -9,8 +10,8 @@ tstart=time.time()
 # Arguments
 parser=argparse.ArgumentParser(description='xxx')
 parser.add_argument('--seed',type=int,default=0,help='(default=%(default)d)')
-parser.add_argument('--experiment',default='',type=str,required=True,choices=['mnist2','pmnist','cifar','mixture'],help='(default=%(default)s)')
-parser.add_argument('--approach',default='',type=str,required=True,choices=['random','sgd','sgd-frozen','lwf','lfl','ewc','imm-mean','progressive','pathnet',
+parser.add_argument('--experiment',default='cifar',type=str, choices=['mnist2','pmnist','cifar','mixture'],help='(default=%(default)s)')
+parser.add_argument('--approach',default='hat',type=str, choices=['random','sgd','sgd-frozen','lwf','lfl','ewc','imm-mean','progressive','pathnet',
                                                                             'imm-mode','sgd-restart',
                                                                             'joint','hat','hat-test'],help='(default=%(default)s)')
 parser.add_argument('--output',default='',type=str,required=False,help='(default=%(default)s)')
@@ -103,6 +104,7 @@ print('Input size =',inputsize,'\nTask info =',taskcla)
 
 # Inits
 print('Inits...')
+from networks import resnet_hat as network
 net=network.Net(inputsize,taskcla).cuda()
 utils.print_model_report(net)
 
